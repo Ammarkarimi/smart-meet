@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Meet Settings</title>
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="options.css">
+  <script type="module" src="options.js"></script>
+</head>
+<body>
+  <header class="page-head">
+    <img src="../../assets/icons/icon48.png" alt="" width="36" height="36">
+    <div>
+      <h1>Smart Meet</h1>
+      <p class="muted">Your AI copilot for Google Meet, Zoom, Teams and any meeting in a browser tab.</p>
+    </div>
+    <span class="saved" id="savedIndicator" hidden>Saved</span>
+  </header>
+
+  <section class="welcome card" id="welcome" hidden>
+    <h2>Welcome! Three steps to get going</h2>
+    <ol>
+      <li><strong>Connect an AI model</strong> below with your own API key. It powers live insights, answers and summaries.</li>
+      <li><strong>Pick how meetings are captured:</strong> audio transcription (any site, best quality) or the meeting's own live captions (free, no extra key).</li>
+      <li>Join a meeting, click the <strong>Smart Meet</strong> toolbar icon and press <strong>Start</strong>. Tip: pin the extension from the puzzle-piece menu.</li>
+    </ol>
+  </section>
+
+  <nav class="toc" aria-label="Sections">
+    <a href="#ai">AI model</a>
+    <a href="#capture">Capture</a>
+    <a href="#insights">Insights</a>
+    <a href="#profile">About you</a>
+    <a href="#privacy">Privacy &amp; data</a>
+  </nav>
+
+  <main>
+    <!-- AI model -->
+    <section class="card" id="ai">
+      <h2>AI model</h2>
+      <p class="muted">Used to detect questions and clarification points live, draft replies, answer questions about meetings and write summaries.</p>
+
+      <div class="field">
+        <label for="llmProvider">Provider</label>
+        <select id="llmProvider" data-key="llm.provider"></select>
+      </div>
+
+      <div class="field" id="llmBaseUrlField">
+        <label for="llmBaseUrl">API base URL</label>
+        <input type="url" id="llmBaseUrl" data-key="llm.baseUrl" placeholder="https://your-endpoint.example.com/v1" spellcheck="false">
+        <p class="hint" id="llmBaseUrlHint"></p>
+      </div>
+
+      <div class="field" id="llmKeyField">
+        <label for="llmKey">API key</label>
+        <div class="input-row">
+          <input type="password" id="llmKey" autocomplete="off" spellcheck="false">
+          <button class="btn" type="button" data-reveal="llmKey">Show</button>
+        </div>
+        <p class="hint" id="llmKeyHint"></p>
+      </div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="llmModel">Model</label>
+          <div class="input-row">
+            <input type="text" id="llmModel" data-key="llm.model" list="llmModels" spellcheck="false">
+            <button class="btn" type="button" id="fetchModels" title="Load the models available to your key">Load list</button>
+          </div>
+          <datalist id="llmModels"></datalist>
+        </div>
+        <div class="field">
+          <label for="llmLiveModel">Live detection model <span class="opt">optional</span></label>
+          <input type="text" id="llmLiveModel" data-key="llm.liveModel" list="llmModels" spellcheck="false" placeholder="Same as main model">
+          <p class="hint">A faster, cheaper model here keeps live insights snappy during long calls.</p>
+        </div>
+      </div>
+
+      <div class="actions-row">
+        <button class="btn btn-primary" type="button" id="testLlm">Test connection</button>
+        <span class="test-result" id="testLlmResult" role="status"></span>
+      </div>
+    </section>
+
+    <!-- Capture -->
+    <section class="card" id="capture">
+      <h2>Capture</h2>
+
+      <fieldset class="field radios">
+        <legend>How should meetings be captured?</legend>
+        <label class="radio"><input type="radio" name="captureMode" value="auto" data-key="capture.mode">
+          <span><strong>Automatic</strong> – audio transcription when a provider is set up, otherwise live captions.</span></label>
+        <label class="radio"><input type="radio" name="captureMode" value="audio" data-key="capture.mode">
+          <span><strong>Audio transcription</strong> – works on any site, separates your voice from others. Uses a speech-to-text API.</span></label>
+        <label class="radio"><input type="radio" name="captureMode" value="captions" data-key="capture.mode">
+          <span><strong>Live captions</strong> – reads captions in Google Meet, Zoom web and Teams web. Free and keeps speaker names; turn captions on in the meeting.</span></label>
+      </fieldset>
+
+      <h3>Speech-to-text</h3>
+      <div class="grid-2">
+        <div class="field">
+          <label for="sttProvider">Transcription provider</label>
+          <select id="sttProvider" data-key="stt.provider"></select>
+        </div>
+        <div class="field" id="sttModelField">
+          <label for="sttModel">Transcription model</label>
+          <input type="text" id="sttModel" data-key="stt.model" list="sttModels" spellcheck="false">
+          <datalist id="sttModels"></datalist>
+        </div>
+      </div>
+      <div class="field" id="sttBaseUrlField">
+        <label for="sttBaseUrl">Transcription base URL</label>
+        <div class="input-row">
+          <input type="url" id="sttBaseUrl" data-key="stt.baseUrl" placeholder="http://localhost:8000/v1" spellcheck="false">
+          <button class="btn" type="button" id="grantSttOrigin" hidden>Allow access</button>
+        </div>
+      </div>
+      <div class="field" id="sttKeyField">
+        <label for="sttKey">Transcription API key</label>
+        <div class="input-row">
+          <input type="password" id="sttKey" autocomplete="off" spellcheck="false">
+          <button class="btn" type="button" data-reveal="sttKey">Show</button>
+        </div>
+        <p class="hint" id="sttKeyHint"></p>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label for="sttLanguage">Spoken language</label>
+          <select id="sttLanguage" data-key="stt.language"></select>
+        </div>
+        <div class="field">
+          <label>Your microphone</label>
+          <label class="switch"><input type="checkbox" data-key="capture.includeMic"> Transcribe my voice too (labelled “You”)</label>
+          <div class="input-row mic-row">
+            <span class="subtle" id="micStatus">Checking…</span>
+            <button class="btn btn-sm" type="button" id="grantMic">Allow microphone</button>
+          </div>
+        </div>
+      </div>
+
+      <details class="advanced">
+        <summary>Advanced audio chunking</summary>
+        <div class="grid-3">
+          <div class="field">
+            <label for="minChunk">Min chunk (s)</label>
+            <input type="number" id="minChunk" min="2" max="30" data-key="capture.minChunkSec" data-type="number">
+          </div>
+          <div class="field">
+            <label for="maxChunk">Max chunk (s)</label>
+            <input type="number" id="maxChunk" min="5" max="60" data-key="capture.maxChunkSec" data-type="number">
+          </div>
+          <div class="field">
+            <label for="silence">Pause to cut (ms)</label>
+            <input type="number" id="silence" min="300" max="3000" step="100" data-key="capture.silenceMs" data-type="number">
+          </div>
+        </div>
+        <p class="hint">Shorter chunks make the transcript appear sooner; longer chunks are cheaper and slightly more accurate.</p>
+      </details>
+    </section>
+
+    <!-- Insights -->
+    <section class="card" id="insights">
+      <h2>Live insights</h2>
+      <fieldset class="field checks">
+        <legend>Flag these during meetings</legend>
+        <label class="switch"><input type="checkbox" data-key="insights.types.question"> Questions that need an answer</label>
+        <label class="switch"><input type="checkbox" data-key="insights.types.clarification"> Points to clarify (vague, ambiguous or conflicting)</label>
+        <label class="switch"><input type="checkbox" data-key="insights.types.action_item"> Action items</label>
+        <label class="switch"><input type="checkbox" data-key="insights.types.decision"> Decisions</label>
+        <label class="switch"><input type="checkbox" data-key="insights.types.key_point"> Key facts &amp; numbers</label>
+      </fieldset>
+      <label class="switch"><input type="checkbox" data-key="insights.suggestReplies"> Suggest what I could say</label>
+      <label class="switch"><input type="checkbox" data-key="insights.autoSummary"> Write a summary when the meeting ends</label>
+      <div class="grid-2 top-gap">
+        <div class="field">
+          <label for="interval">Check at least every (s)</label>
+          <input type="number" id="interval" min="5" max="120" data-key="insights.intervalSec" data-type="number">
+        </div>
+        <div class="field">
+          <label for="minChars">…or after this many new characters</label>
+          <input type="number" id="minChars" min="50" max="2000" step="10" data-key="insights.minNewChars" data-type="number">
+        </div>
+      </div>
+    </section>
+
+    <!-- Profile -->
+    <section class="card" id="profile">
+      <h2>About you</h2>
+      <p class="muted">Helps the AI recognize questions aimed at you and suggest better replies. Sent to your AI provider with each request.</p>
+      <div class="field">
+        <label for="name">Your name (as it appears in meetings)</label>
+        <input type="text" id="name" data-key="profile.name" placeholder="e.g. Priya Sharma">
+      </div>
+      <div class="field">
+        <label for="about">Role &amp; context</label>
+        <textarea id="about" rows="3" data-key="profile.about" placeholder="e.g. Product manager for the mobile app. I own the release schedule and pricing decisions."></textarea>
+      </div>
+    </section>
+
+    <!-- Privacy -->
+    <section class="card" id="privacy">
+      <h2>Privacy &amp; data</h2>
+      <ul class="facts">
+        <li>Transcripts, insights and chats are stored <strong>only in this browser</strong> (IndexedDB). There is no Smart Meet server.</li>
+        <li>Audio and text are sent directly from your browser to the AI and transcription providers you configure, under your own API keys and their terms.</li>
+        <li>API keys are stored in this browser's extension storage and are never synced or sent anywhere else.</li>
+      </ul>
+      <label class="check consent"><input type="checkbox" data-key="consentAccepted">
+        <span>I'll inform meeting participants that I'm using an AI note-taker and comply with applicable recording-consent laws and policies.</span></label>
+      <div class="field top-gap">
+        <label for="retention">Automatically delete meetings older than</label>
+        <select id="retention" data-key="privacy.retentionDays" data-type="number">
+          <option value="0">Never</option>
+          <option value="7">7 days</option>
+          <option value="30">30 days</option>
+          <option value="90">90 days</option>
+          <option value="365">1 year</option>
+        </select>
+      </div>
+      <div class="actions-row">
+        <button class="btn" type="button" id="exportAll">Export all meetings (JSON)</button>
+        <button class="btn btn-danger" type="button" id="deleteAll">Delete all meetings</button>
+        <span class="subtle" id="storageInfo"></span>
+      </div>
+      <p class="hint"><a href="../privacy/privacy.html" target="_blank" rel="noopener">Read the privacy policy</a></p>
+    </section>
+
+    <footer class="foot subtle" id="foot"></footer>
+  </main>
+</body>
+</html>

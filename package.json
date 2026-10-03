@@ -1,0 +1,17 @@
+{
+  "name": "smart-meet",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI meeting copilot browser extension: live questions and clarification points, post-meeting Q&A, bring your own LLM key.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "check": "node scripts/build.mjs --check",
+    "build": "node scripts/build.mjs",
+    "icons": "node scripts/gen-icons.mjs",
+    "verify": "npm test && npm run check"
+  }
+}

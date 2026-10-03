@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Meet</title>
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="sidepanel.css">
+  <script type="module" src="sidepanel.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="../../assets/icons/icon32.png" alt="" width="20" height="20">
+      <span>Smart Meet</span>
+    </div>
+    <div class="pill" id="sessionPill" data-state="idle">Not capturing</div>
+    <button class="icon-btn" id="settingsBtn" title="Settings" aria-label="Settings"></button>
+  </header>
+
+  <section class="session-card" id="sessionCard" aria-live="polite"></section>
+  <div id="banners" class="banners" aria-live="polite"></div>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" class="tab" data-view="live" aria-selected="true">Live</button>
+    <button role="tab" class="tab" data-view="ask" aria-selected="false">Ask AI</button>
+    <button role="tab" class="tab" data-view="history" aria-selected="false">History</button>
+  </nav>
+
+  <main>
+    <section class="view" id="view-live" role="tabpanel">
+      <div class="live-toolbar">
+        <div class="segmented" role="group" aria-label="Live view">
+          <button class="seg active" data-sub="insights">Insights <span class="count" id="insightCount">0</span></button>
+          <button class="seg" data-sub="transcript">Transcript</button>
+        </div>
+        <label class="toggle subtle" title="Show items you marked done or dismissed">
+          <input type="checkbox" id="showDone"> Show done
+        </label>
+      </div>
+      <div class="chips" id="filterChips" role="group" aria-label="Filter insights"></div>
+      <div id="insightList" class="insight-list"></div>
+      <div id="transcriptList" class="transcript" hidden></div>
+      <details class="notes" id="notesBox">
+        <summary>Meeting notes &amp; agenda <span class="subtle">– helps the AI understand context</span></summary>
+        <textarea id="notesInput" rows="4" placeholder="e.g. Quarterly planning with the design team. I own the API timeline. Budget cap is $40k."></textarea>
+      </details>
+    </section>
+
+    <section class="view" id="view-ask" role="tabpanel" hidden>
+      <div class="ask-head">
+        <select id="askMeeting" aria-label="Meeting to ask about"></select>
+        <button class="icon-btn" id="clearChat" title="Clear conversation" aria-label="Clear conversation"></button>
+      </div>
+      <div id="chatLog" class="chat-log"></div>
+      <div class="chips suggestions" id="askSuggestions"></div>
+      <form class="composer" id="askForm">
+        <textarea id="askInput" rows="1" placeholder="Ask anything about this meeting…" aria-label="Your question"></textarea>
+        <button class="btn btn-primary" id="askSend" type="submit" aria-label="Send"></button>
+      </form>
+    </section>
+
+    <section class="view" id="view-history" role="tabpanel" hidden>
+      <div id="historyList">
+        <div class="history-search">
+          <input type="search" id="historySearch" placeholder="Search meetings">
+        </div>
+        <div id="historyItems"></div>
+      </div>
+      <div id="historyDetail" hidden></div>
+    </section>
+  </main>
+
+  <dialog id="consentDialog" class="dialog">
+    <form method="dialog">
+      <h2>Before your first capture</h2>
+      <p>Smart Meet transcribes the meeting audio or captions and sends the text to the AI provider you configured, using your API key.</p>
+      <p>Recording or transcribing conversations may require the consent of everyone present. Let participants know you're using an AI note-taker, and follow your organization's policies and local law.</p>
+      <label class="check"><input type="checkbox" id="consentCheck"> I'll inform participants and use Smart Meet lawfully.</label>
+      <div class="dialog-actions">
+        <button class="btn" value="cancel">Cancel</button>
+        <button class="btn btn-primary" id="consentAccept" value="accept" disabled>Continue</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>

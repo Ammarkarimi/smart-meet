@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Allow Microphone</title>
+  <link rel="stylesheet" href="../styles/base.css">
+  <style>
+    body { display: grid; place-items: center; min-height: 100vh; padding: 20px; }
+    .box { max-width: 420px; text-align: center; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px; box-shadow: var(--shadow); }
+    h1 { font-size: 18px; margin: 12px 0 6px; }
+    p { color: var(--text-2); margin: 0 0 16px; }
+    .status { margin-top: 12px; font-weight: 600; }
+    .status.ok { color: var(--ok); }
+    .status.err { color: var(--danger); }
+  </style>
+  <script type="module" src="mic.js"></script>
+</head>
+<body>
+  <div class="box">
+    <img src="../../assets/icons/icon48.png" alt="" width="44" height="44">
+    <h1>Let Smart Meet hear your side</h1>
+    <p>Allow microphone access once so your own voice is transcribed and labelled “You”. Audio is only captured while you are actively capturing a meeting.</p>
+    <button class="btn btn-primary" id="allow">Allow microphone</button>
+    <div class="status" id="status" role="status"></div>
+  </div>
+</body>
+</html>
