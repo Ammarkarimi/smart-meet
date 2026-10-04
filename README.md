@@ -12,7 +12,11 @@ A Chrome/Edge extension that listens to your online meetings with you. It flags 
 - **Bring your own model.** OpenAI, Anthropic Claude, Google Gemini, OpenRouter, Groq, Ollama (local), or any OpenAI-compatible endpoint. Speech-to-text runs on OpenAI, Groq, Deepgram, or a self-hosted Whisper server.
 - **Private by design.** Data stays in IndexedDB on the device. Requests go straight from the browser to the provider you chose. There is no analytics or tracking. See [PRIVACY.md](PRIVACY.md).
 
-## Install (development)
+## Install
+
+**From a release:** download `smart-meet-<version>.zip` from [Releases](https://github.com/Ammarkarimi/smart-meet/releases) and unzip it. Then follow steps 2–4 below, selecting the unzipped folder.
+
+**From source:**
 
 1. `npm run icons` (only needed if you change the icon; the PNGs are committed).
 2. Open `chrome://extensions` (or `edge://extensions`) and turn on **Developer mode**.
@@ -69,7 +73,7 @@ npm run check     # validates manifest + every file reference
 npm run build     # check, then package dist/smart-meet-<version>.zip
 ```
 
-There are no runtime or dev dependencies. CI (`.github/workflows/ci.yml`) runs the tests and uploads the store zip as a build artifact.
+There are no runtime or dev dependencies. CI (`.github/workflows/ci.yml`) runs the tests and uploads the store zip as a build artifact on every push. Pushing a `v<version>` tag runs `.github/workflows/release.yml`, which publishes the zip as a GitHub release.
 
 ### Manual test checklist before a release
 
@@ -81,15 +85,17 @@ There are no runtime or dev dependencies. CI (`.github/workflows/ci.yml`) runs t
 - [ ] Closing the meeting tab stops the capture; an invalid API key shows a banner rather than failing silently.
 - [ ] Settings: Test connection works for each provider you support; Delete all clears History.
 
-## Publishing to the Chrome Web Store
+## Deployment
+
+Smart Meet has no backend. Deploying it means publishing the privacy policy on GitHub Pages, tagging a release, and submitting the zip to the Chrome Web Store and Microsoft Edge Add-ons. The full step-by-step guide is in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
+In short:
 
 1. Bump `version` in **both** `manifest.json` and `package.json` (`npm run check` enforces that they match), then update `CHANGELOG.md`.
-2. Run `npm run build` and upload `dist/smart-meet-<version>.zip` in the [Developer Dashboard](https://chrome.google.com/webstore/devconsole).
-3. Use [`docs/STORE_LISTING.md`](docs/STORE_LISTING.md) for the description, permission justifications and data-use disclosures.
-4. Host `PRIVACY.md` at a public URL (for example on GitHub Pages) and enter it as the privacy policy URL.
-5. Add screenshots (1280×800) of the side panel during a meeting, the Ask AI tab and the settings page.
-
-The same zip works for the Microsoft Edge Add-ons store.
+2. Run `npm run verify` and go through the manual test checklist above.
+3. Commit, then `git tag v<version>` and `git push origin main v<version>`. The Release workflow builds `smart-meet-<version>.zip` and attaches it to a GitHub release.
+4. Upload the zip to the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) and [Edge Partner Center](https://partner.microsoft.com/dashboard/microsoftedge/overview). The listing text is in [docs/STORE_LISTING.md](docs/STORE_LISTING.md), and the screenshots, promo tile and logo are in [docs/store/](docs/store/).
+5. Privacy policy URL for both stores: `https://ammarkarimi.github.io/smart-meet/PRIVACY.html`. Enable it once under **Settings → Pages** (main branch, root folder).
 
 ## Limitations
 

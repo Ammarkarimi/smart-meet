@@ -1,6 +1,6 @@
 # Smart Meet Privacy Policy
 
-_Last updated: October 2, 2026_
+_Last updated: October 3, 2026_
 
 Smart Meet is a browser extension that helps you follow online meetings. It transcribes the meeting, flags questions and points to clarify, and answers questions about the conversation. It runs on **your own API keys**, and there is **no Smart Meet server**.
 
@@ -58,4 +58,4 @@ If this policy changes, the updated version will ship with the extension and the
 
 ## Contact
 
-Questions about privacy: open an issue in the project repository, or email the publisher at the address listed on the Chrome Web Store page.
+Questions about privacy: open an issue at https://github.com/Ammarkarimi/smart-meet/issues, or email the publisher at the address listed on the Chrome Web Store or Edge Add-ons page.

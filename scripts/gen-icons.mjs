@@ -8,6 +8,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'assets', 'icons');
+const STORE_OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'docs', 'store');
 const SIZES = [16, 32, 48, 128];
 
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -122,3 +123,9 @@ for (const size of SIZES) {
   writeFileSync(file, encodePng(size, render(size)));
   console.log('wrote', file);
 }
+
+// 300×300 logo for the Edge Add-ons listing (not packaged in the extension).
+mkdirSync(STORE_OUT, { recursive: true });
+const logo = join(STORE_OUT, 'logo-300.png');
+writeFileSync(logo, encodePng(300, render(300)));
+console.log('wrote', logo);

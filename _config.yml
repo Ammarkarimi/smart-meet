@@ -1,0 +1,18 @@
+# GitHub Pages (Settings → Pages → Deploy from a branch → main, / (root)).
+# Publishes README as the home page and the privacy policy at /PRIVACY.html,
+# which is the URL the Chrome Web Store and Edge Add-ons listings link to.
+title: Smart Meet
+description: AI meeting copilot for Google Meet, Zoom and Teams. Bring your own LLM API key.
+theme: jekyll-theme-primer
+exclude:
+  - .github
+  - .vscode
+  - assets
+  - dist
+  - docs
+  - node_modules
+  - scripts
+  - src
+  - test
+  - manifest.json
+  - package.json

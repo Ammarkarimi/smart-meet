@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "description": "Spots questions and points to clarify in your Google Meet, Zoom and Teams calls, live. Bring your own LLM API key.",
   "minimum_chrome_version": "116",
+  "homepage_url": "https://github.com/Ammarkarimi/smart-meet",
   "icons": {
     "16": "assets/icons/icon16.png",
     "32": "assets/icons/icon32.png",
